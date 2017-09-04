@@ -2,28 +2,43 @@ require 'test_helper'
 
 class StandardsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
-    get standards_index_url
+    get standards_path
     assert_response :success
   end
 
-  test "should get show" do
-    get standards_show_url
-    assert_response :success
-  end
+    def test_should_successfully_import_csv
+      students_csv_rows = <<-eos
+        Barbara Geary,2,2,K,1
+        Name2,K,1,2,2
+        Name3,3,2,2,K
+        eos
 
-  test "should get import" do
-    get standards_import_url
-    assert_response :success
-  end
+      domains_csv_rows = <<-eos
+        K,RF,RL,RI
+        1,RF,RL,RI
+        2,W,WX,Y
+        3,WX,YZ,Z
+        eos
 
-  test "should get export" do
-    get standards_export_url
-    assert_response :success
-  end
 
-  test "should get destroy" do
-    get standards_destroy_url
-    assert_response :success
-  end
+      domains_file = Tempfile.new('new_domains.csv')
+      domains_file.write(domains_csv_rows)
+      domains_file.rewind
+      tests_file = Tempfile.new('new_tests.csv')
+      tests_file.write(students_csv_rows)
+      tests_file.rewind
+
+      assert_difference "Standard.count", 1 do
+        get standards_path, :file => Rack::Test::UploadedFile.new(domains_file, tests_file, 'text/csv')
+      end
+
+      assert_redirected_to your_path
+      assert_equal "Successfully imported the CSV file.", flash[:notice]
+    end
+
+    click_on 'Download as CSV'
+header = page.response_headers['Content-Disposition']
+header.should match /^attachment/
+header.should match /filename="my_file.csv"$/
 
 end
