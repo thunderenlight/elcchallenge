@@ -36,9 +36,4 @@ class StandardsControllerTest < ActionDispatch::IntegrationTest
       assert_equal "Successfully imported the CSV file.", flash[:notice]
     end
 
-    click_on 'Download as CSV'
-header = page.response_headers['Content-Disposition']
-header.should match /^attachment/
-header.should match /filename="my_file.csv"$/
-
 end

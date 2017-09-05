@@ -1,3 +1,25 @@
 // Place all the styles related to the Standards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@mixin box_sizing {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+/* forms */
+
+input, textarea, select, .uneditable_input {
+	border: 1px solid #bbb;
+	width: 50%;
+	margin-bottom: 15px;
+	@include box_sizing;
+}
+
+input {
+	height: auto !important;
+}
+
+.list {
+	margin-top: 50px;
+}

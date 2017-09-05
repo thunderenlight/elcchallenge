@@ -1,2 +1,10 @@
-<h1>Standards#show</h1>
-<p>Find me in app/views/standards/show.html.erb</p>
+<h1>Standards</h1>
+<p>Here are the tracks for each student:</p>
+
+
+<% @standard.guides.each do |track| %>
+
+<h4><%= track.student %></h4>
+<p><%= track.path %></p>
+<% end %>
+<%= link_to "Home", root_url %>

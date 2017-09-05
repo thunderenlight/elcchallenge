@@ -18,13 +18,13 @@ class StandardsController < ApplicationController
     @standard = Standard.new({domains: domains.read, tests: tests.read})
     invalid = domains.nil? || tests.nil?
 
-    if @standard.save
+    if !invalid && @standard.save
       @standard.run
       flash[:success] = "Guide created"
     else
       flash[:error] = "Try again"
     end
-    render 'index' 
+    redirect_to :back
   end
 
 
@@ -33,6 +33,7 @@ class StandardsController < ApplicationController
     respond_to do |format|
       format.csv { send_data @standard.save_csv }
   end
+end
 
   def destroy
     Standard.find(params[:id]).destroy
@@ -45,6 +46,7 @@ class StandardsController < ApplicationController
   def standard_params
     params.require(:standard).permit(:tests, :domains)
   end
+
 end
 
 

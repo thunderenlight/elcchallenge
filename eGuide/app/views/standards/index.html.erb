@@ -1,2 +1,35 @@
-<h1>Standards#index</h1>
-<p>Find me in app/views/standards/index.html.erb</p>
+<h1>Welcome to your Guide maker!</h1>
+<p>Please import your csv files of tests and domains here.</p>
+
+<%= form_for :standard, url: standards_path, html: { multipart: true } do %>
+	<div class="field">
+	    <label>Tests in CSV format </label><br>
+	    <%= file_field_tag :tests %>
+	 </div>
+	 <div class="field">
+	  <label>Domains in CSV format</label><br>
+	    <%= file_field_tag :domains %>
+	 </div>
+	 <div class="actions" >
+	    <%= submit_tag "Create Guide" %><br>
+	 </div>
+<% end %>
+
+<div class="row">
+	<div class="list">
+		<h2>Here are the available Guides:</h2>
+
+			<% @standards.each do |standard|  %>
+				<ol>
+					<strong>Guide number: <%= standard.id %></strong>
+					, created at <%= standard.created_at.strftime("%I:%M%p %m/%d") %>
+					<%= link_to 'Save CSV', save_standard_path(id: standard.id, format: "csv") %>
+					<%= link_to "Show", standard %>
+					<%= link_to "Delete", standard, method: :delete %>
+					
+				</ol>
+			<% end %>
+
+	</div>
+</div>
+
